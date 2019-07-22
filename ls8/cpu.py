@@ -7,6 +7,14 @@ class CPU:
 
     def __init__(self):
         """Construct a new CPU."""
+        memory = [0] * 256 # 256 max memory
+        register = [0] * 8 # 8 gen purpose registers
+        pc = 0
+
+    def ram_read(self, memory, mar):
+        pass
+
+    def ram_write(self, memory, mar, mdr):
         pass
 
     def load(self):
