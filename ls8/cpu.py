@@ -7,15 +7,15 @@ class CPU:
 
     def __init__(self):
         """Construct a new CPU."""
-        memory = [0] * 256 # 256 max memory
-        register = [0] * 8 # 8 gen purpose registers
-        pc = 0
+        self.ram = [00000000] * 256 # 256 max memory
+        self.register = [0] * 8 # 8 gen purpose registers
+        self.pc = 0
 
-    def ram_read(self, memory, mar):
-        pass
+    def ram_read(self, mar):
+        print(self.ram[mar])
 
-    def ram_write(self, memory, mar, mdr):
-        pass
+    def ram_write(self, mar, mdr):
+        self.ram[mar] = mdr
 
     def load(self):
         """Load a program into memory."""
@@ -70,4 +70,27 @@ class CPU:
 
     def run(self):
         """Run the CPU."""
-        pass
+        IR = 0
+        running = True
+
+        while running:
+            command = self.ram[IR]
+
+            if command == 0b10000010:
+                reg_add = self.ram[IR + 1]
+                reg_val = self.ram[IR + 2]
+                self.ram_write(reg_add, reg_val)
+                IR += 3
+
+            elif command == 0b01000111:
+                reg_add = self.ram[IR + 1]
+                self.ram_read(reg_add)
+                IR += 2
+
+            elif command == 0b00000001:
+                running = False
+                sys.exit(1)
+
+            else:
+                print(f'unknown instruction {command}')
+                sys.exit(1)
