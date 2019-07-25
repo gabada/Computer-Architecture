@@ -7,6 +7,8 @@ SAVE_REGISTER = 4
 PRINT_REGISTER = 5
 PUSH = 6
 POP = 7
+CALL = 8
+RET = 9
 
 memory = [
 		PRINT_BEEJ,
@@ -70,6 +72,22 @@ while running:
 		register[regnum] = value # store the value in 
 		register[SP] += 1 # increment SP
 		pc += 2
+
+	elif command == CALL:
+		# get address of instruction right after this CALL
+		return_addr = pc + 2
+		# push onlto stack
+		register[SP] -= 1 # decrement SP
+		memory[register[SP]] = return_addr # store that value in memory
+		regnum = memory[pc+1] # get reg number
+		subroutine_addr = register[regnum]
+		pc = subroutine_addr
+
+	elif command == RET:
+		# pop return addr
+		return_addr = memory[register[SP]]
+		register[SP] += 1
+		pc = return_addr
 
 	else:
 		print(f'unknown instruction {command}')
